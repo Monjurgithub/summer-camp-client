@@ -1,39 +1,54 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import SocialLogin from '../sherad/SocialLogin';
 import { AuthContext } from '../provider/Authprovider';
 import Swal from 'sweetalert2';
 
 const Login = () => {
-    const {user, login} = useContext(AuthContext);
+    const { user, login } = useContext(AuthContext);
+    const [showPassword, setShowPassword] = useState(false);
     let navigate = useNavigate();
     let location = useLocation();
     let from = location.state?.from?.pathname || "/";
-    const handleLogin =(e)=>
-    {
+    const handleLogin = (e) => {
         e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    login(email, password)
-    .then(result=>
-        {
-            const user = result.user;
-            
-            navigate(from, { replace: true });
-            if(user)
-            {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Login Success',
-                    showConfirmButton: false,
-                    timer: 1500
-                  })
-            }
-              
-        })
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        login(email, password)
+            .then(result => {
+                const user = result.user;
+
+                navigate(from, { replace: true });
+                if (user) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Login Success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
+            })
+            .catch((error) => {
+                if (error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Invalied Email and password',
+                        icon: 'error',
+                        confirmButtonText: 'ok'
+                    })
+                }
+                const errorMessage = error.message;
+            });
+
+
     }
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
     return (
         <div >
             <div className="flex justify-center my-14">
@@ -48,21 +63,32 @@ const Login = () => {
                             <div className="">
                                 <div className="m-1 text-lg text-semibold">Email</div>
                                 <input type="text"
-                                name='email'
-                                    className="border-b border-gray-500 focus:outline-none  text-gray-500 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px] bg-transparent"/>
+                                    name='email'
+                                    className="border-b border-gray-500 focus:outline-none  text-gray-500 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px] bg-transparent" />
                             </div>
                             <div className="">
                                 <div className="m-1 text-lg  text-semibold">Password</div>
-                                <input type="password"
-                                name='password'
-                                    className="border-b border-gray-500 focus:outline-none  text-gray-500 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px] bg-transparent"/>
+                                <input type={showPassword ? 'text' : 'password'}
+                                    name='password'
+                                    className="border-b border-gray-500 focus:outline-none  text-gray-500 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px] bg-transparent" />
                             </div>
+                            <button
+                type="button"
+                className="ml-2 focus:outline-none"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? (
+                  <FiEyeOff className="text-gray-600 h-5 w-5" />
+                ) : (
+                  <FiEye className="text-gray-600 h-5 w-5" />
+                )}
+              </button>
                         </div>
                         <div className="text-center mt-7">
                             {/* <button
                                 className=" px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-stone-600 hover:bg-stone-500  font-medium m-2 mb-6 ">Sign
                                 In</button> */}
-                                <input className='px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-stone-600 hover:bg-stone-500  font-medium m-2 mb-6 ' type="submit" value="Login" />
+                            <input className='px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-stone-600 hover:bg-stone-500  font-medium m-2 mb-6 ' type="submit" value="Login" />
                         </div>
 
                     </form>
@@ -72,7 +98,7 @@ const Login = () => {
 
                 </div>
             </div>
-           
+
 
         </div>
     );
