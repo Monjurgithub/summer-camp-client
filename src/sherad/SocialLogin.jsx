@@ -30,7 +30,7 @@ const SocialLogin = () => {
 
             <div className="text-stone-700 text-base font-semibold text-center my-10 space-y-2 m-2 cursor-pointer">
                 <div className="flex justify-between border-2 border-stone-700 px-6 py-2">
-                    <div className="m-1 text-lg" onClick={handleGoogle}>Continue with Google</div>
+                    <div className="m-1 text-lg text-white" onClick={handleGoogle}>Continue with Google</div>
                 </div>
 
 

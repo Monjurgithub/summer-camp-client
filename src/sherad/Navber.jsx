@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../provider/Authprovider';
 import Swal from 'sweetalert2'
 
 const Navber = () => {
     const { user, logOut } = useContext(AuthContext);
+    const navigate = useNavigate()
     const handleLogout = () => {
         logOut()
             .then(() => {
@@ -15,6 +16,7 @@ const Navber = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/")
             })
             .catch(err => console.log(err))
     }
@@ -27,18 +29,19 @@ const Navber = () => {
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                         <li><a className='text-black'>Home</a></li>
-                        <li><a className='text-black'>Instructor</a></li>
-                        <li><a className='text-black'>Class</a></li>
+                        <Link to="/instructor"><li><a className='text-black'>Instructor</a></li></Link>
+                        <Link to="/class"><li className='"hover:underline underline-offset-4 decoration-2 decoration-white py-2 rounded-lg px-5'><a>Class</a></li></Link>
                         <li>
                         {user ? <div className="navbar-end">
                         <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                                <div className="w-10 rounded-full"  >
-                                    <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-                                </div>
+                               
+                                <img className="w-10 rounded-full "
+                            src={user?.photoURL} alt="" />
+                                
                             </label>
                             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><a className='text-black'>Dashboard</a></li>
+                                <Link to="dashboard"><li><a className='text-black'>Dashboard</a></li></Link>
                                 <li onClick={handleLogout}><a className='text-black'>Logout</a></li>
                             </ul>
                         </div>
@@ -51,18 +54,18 @@ const Navber = () => {
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 hidden lg:flex items-center text-[18px] font-semibold pl-32">
                     <Link to='/'><li className='"hover:underline underline-offset-4 decoration-2 decoration-white py-2 rounded-lg px-5'><a>Home</a></li></Link>
-                    <Link><li className='"hover:underline underline-offset-4 decoration-2 decoration-white py-2 rounded-lg px-5'><a>Instructor</a></li></Link>
+                    <Link to="/instructor"><li className='"hover:underline underline-offset-4 decoration-2 decoration-white py-2 rounded-lg px-5'><a>Instructor</a></li></Link>
                     <Link to="class"><li className='"hover:underline underline-offset-4 decoration-2 decoration-white py-2 rounded-lg px-5'><a>Class</a></li></Link>
                     <li>
                     {user ? <div className="navbar-end">
                         <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full"  >
-                                    <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <img src={user?.photoURL} />
                                 </div>
                             </label>
                             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><a className='text-black'>Dashboard</a></li>
+                            <Link to="dashboard"><li><a className='text-black'>Dashboard</a></li></Link>
                                 <li onClick={handleLogout}><a className='text-black'>Logout</a></li>
                             </ul>
                         </div>

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './Authprovider';
 import { Navigate, useLocation } from 'react-router-dom';
-import Loader from '../sherad/Loader';
 
 const UserPrivateRoute = ({children}) => {
     const {user, loading} = useContext(AuthContext);
@@ -12,7 +11,7 @@ const UserPrivateRoute = ({children}) => {
     }
     if(loading)
     {
-        return <h3>gffdhgvjkghgjlj</h3>
+        return <progress className="progress w-56"></progress>
     }
 
     return <Navigate to="/login" state={{from: location}} replace></Navigate>

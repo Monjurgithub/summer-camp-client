@@ -4,11 +4,12 @@ import SocialLogin from '../sherad/SocialLogin';
 import { AuthContext } from '../provider/Authprovider';
 import Swal from 'sweetalert2';
 import { saveUserDB } from '../fetch/userfetch';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
     const { register, handleSubmit,reset, formState: { errors } } = useForm();
     const {createUser, user, userUpdateProfile} = useContext(AuthContext)
+    const navigate = useNavigate()
     // const handleReg =(e)=>
     // {
     //     e.preventDefault();
@@ -18,16 +19,18 @@ const SignUp = () => {
     // console.log(email);
     // }
     const onSubmit = data => {
-        console.log(data)
-        createUser(data.email, data.password)
+        console.log(data.password, data.confirmpassword)
+        if(data.password === data.confirmpassword)
+        {
+             createUser(data.email, data.password)
         .then(result=>{
             const newUser = result.user;
             console.log(newUser);
             userUpdateProfile(data.name, data.photourl)
             .then(()=>{
-                const saveuser = {name: data.name, email: data.email}
+                const saveuser = {name: data.name, email: data.email, photo: data.photourl}
                 saveUserDB(saveuser)
-                
+                navigate("/")
                 reset();
             })
             .catch(error=>console.log(error))
@@ -43,6 +46,9 @@ const SignUp = () => {
                   })
             }
         })
+
+        }
+       
     };
     return (
         <div>
